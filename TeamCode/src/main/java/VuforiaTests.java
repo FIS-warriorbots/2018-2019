@@ -38,11 +38,13 @@ public class VuforiaTests extends LinearOpMode {
         backSpace.setName("Back-Space");
 
         //add all trackables to list
-        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targetsRoverRuckus);
+        List<VuforiaTrackable> Trackables = new ArrayList<VuforiaTrackable>();
+        Trackables.addAll(targetsRoverRuckus);
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
+
+        targetsRoverRuckus.activate();
 
         waitForStart();
 
