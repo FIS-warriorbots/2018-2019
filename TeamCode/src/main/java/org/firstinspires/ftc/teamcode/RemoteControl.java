@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp
 public class RemoteControl extends LinearOpMode {
 
-    double multiplier = 0.5f;
+    private double multiplier = 0.6f;
     private DcMotor leftMotor;
     private  DcMotor rightMotor;
 
@@ -25,14 +25,12 @@ public class RemoteControl extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            LeftPower = -this.gamepad1.left_stick_y;
-            RightPower = this.gamepad1.right_stick_y;
+            LeftPower = -this.gamepad1.left_stick_y * multiplier;
+            RightPower = this.gamepad1.right_stick_y * multiplier;
 
             leftMotor.setPower(LeftPower);
             rightMotor.setPower(RightPower);
 
-            telemetry.addData("multiplier",  multiplier);
-            telemetry.update();
         }
 
     }
