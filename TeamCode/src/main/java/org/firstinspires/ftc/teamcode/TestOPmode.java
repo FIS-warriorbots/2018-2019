@@ -15,33 +15,42 @@ public class TestOPmode extends LinearOpMode {
     //motor declaration
     private DcMotor leftMotor;
     private DcMotor rightMotor;
+    private DcMotor hook;
     private double expectedLeft = 0f;
     private double expectedRight = 0f;
+    private double expectedHook = 0f;
 
     @Override
     public void runOpMode() {
         //motor initialization
         leftMotor = hardwareMap.get(DcMotor.class, "LeftMotor");
         rightMotor = hardwareMap.get(DcMotor.class, "RightMotor");
+        hook = hardwareMap.get(DcMotor.class, "HookMotor");
 
         waitForStart();
 
+        /*
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftMotor.setPower(1f);
         leftMotor.setTargetPosition(2000);
+        */
 
-        //leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while(opModeIsActive()){
 
             //getting input from controller for setting motor power
             expectedLeft = -this.gamepad1.left_stick_y * multiplier;
             expectedRight = this.gamepad1.right_stick_y * multiplier;
+            expectedHook = this.gamepad1.right_trigger * multiplier;
 
             //set motor power
-            //leftMotor.setPower(expectedLeft);
+            leftMotor.setPower(expectedLeft);
             rightMotor.setPower(expectedRight);
+            hook.setPower(expectedHook);
+
 
             if(!this.gamepad1.dpad_up && !this.gamepad1.dpad_down){
                 dpadDown = false;
@@ -67,6 +76,10 @@ public class TestOPmode extends LinearOpMode {
             telemetry.addData("Right motor actual", rightMotor.getPower());
 
             telemetry.addData("multiplier", multiplier);
+
+            telemetry.addData("left", leftMotor.getCurrentPosition());
+            telemetry.addData("right", rightMotor.getCurrentPosition()); //450 = 45 cm
+            telemetry.addData("hook", hook.getCurrentPosition());
 
             telemetry.update(); //sent out telemetry values to driver station
         }

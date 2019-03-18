@@ -25,8 +25,8 @@ public class RemoteControl extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            LeftPower = -this.gamepad1.left_stick_y * multiplier;
-            RightPower = this.gamepad1.right_stick_y * multiplier;
+            LeftPower = this.gamepad1.left_stick_y * multiplier;
+            RightPower = -this.gamepad1.right_stick_y * multiplier;
 
             leftMotor.setPower(LeftPower);
             rightMotor.setPower(RightPower);

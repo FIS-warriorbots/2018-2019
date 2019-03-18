@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -13,13 +14,18 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 @Autonomous
-public class autonomous extends LinearOpMode {
+public class Sampling extends LinearOpMode {
+
+    ElapsedTime time = new ElapsedTime();
+
+    boolean delStat = false;
+    double delay = 500f;
 
     private DcMotor leftMotor;
     private DcMotor rightMotor;
 
-    private int distance = 500;
-    private double motorpower = 0.2f;
+    private int distance = 1000; //1000 =
+    private double motorpower = 0.4f;
 
     private boolean Sampled = false;
 
@@ -46,8 +52,8 @@ public class autonomous extends LinearOpMode {
         rightMotor = hardwareMap.get(DcMotor.class, "RightMotor");
 
 
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         initVuforia();
 
@@ -61,9 +67,20 @@ public class autonomous extends LinearOpMode {
             if(tensorFlow != null){
                 tensorFlow.activate();
             }
+
+            rightMotor.setPower(motorpower);
+            leftMotor.setPower(motorpower);
+
+            time.reset();
         }
 
         while(opModeIsActive()){
+
+            if(time.milliseconds() >= delay){
+                delStat = !delStat;
+                time.reset();
+            }
+
             List<Recognition> recognitions = tensorFlow.getUpdatedRecognitions();
 
             GoldMineralX = -1;
@@ -84,7 +101,7 @@ public class autonomous extends LinearOpMode {
             }
 
             if(!Sampled) {
-                if ((GoldMineralX >= 550) && (GoldMineralX <= 650)) {
+                if ((GoldMineralX >= 500) && (GoldMineralX <= 700)) {
 
                     leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -92,28 +109,42 @@ public class autonomous extends LinearOpMode {
                     leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    leftMotor.setTargetPosition(distance);
-                    rightMotor.setTargetPosition(-distance);
+                    leftMotor.setTargetPosition(-distance);
+                    rightMotor.setTargetPosition(distance);
 
-                    leftMotor.setPower(motorpower);
-                    rightMotor.setPower(-motorpower);
+                    leftMotor.setPower(-motorpower);
+                    rightMotor.setPower(motorpower);
 
                     Sampled = true;
                 }
+
+                else{
+                    if(delStat){
+                        rightMotor.setPower(motorpower);
+                        leftMotor.setPower(motorpower);
+                    }
+
+                    else{
+                        rightMotor.setPower(0);
+                        leftMotor.setPower(0);
+                    }
+                }
+
                 /*
                 else {
                     if(GoldMineralX != -1){
                         if(GoldMineralX > 750){
-                            rightMotor.setPower(-motorpower);
+                            rightMotor.setPower(motorpower);
                             leftMotor.setPower(motorpower);
                         }
                         else{
-                            rightMotor.setPower(motorpower);
+                            rightMotor.setPower(-motorpower);
                             leftMotor.setPower(-motorpower);
                         }
                     }
                 }
-                */
+
+               */
             }
 
             telemetry.addData("Xpos", GoldMineralX);
