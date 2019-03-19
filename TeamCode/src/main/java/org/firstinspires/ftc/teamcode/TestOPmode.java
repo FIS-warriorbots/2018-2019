@@ -35,6 +35,8 @@ public class TestOPmode extends LinearOpMode {
         leftMotor.setTargetPosition(2000);
         */
 
+        hook.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hook.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -42,9 +44,9 @@ public class TestOPmode extends LinearOpMode {
         while(opModeIsActive()){
 
             //getting input from controller for setting motor power
-            expectedLeft = -this.gamepad1.left_stick_y * multiplier;
-            expectedRight = this.gamepad1.right_stick_y * multiplier;
-            expectedHook = this.gamepad1.right_trigger * multiplier;
+            expectedLeft = this.gamepad1.left_stick_y * multiplier;
+            expectedRight = -this.gamepad1.right_stick_y * multiplier;
+            expectedHook = this.gamepad1.right_trigger - this.gamepad1.left_trigger;
 
             //set motor power
             leftMotor.setPower(expectedLeft);

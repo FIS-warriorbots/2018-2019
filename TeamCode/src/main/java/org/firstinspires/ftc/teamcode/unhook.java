@@ -9,17 +9,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Autonomous
 public class unhook extends LinearOpMode {
 
-    private DcMotor motor;
+    private DcMotor hook;
 
-    private double power = 0.2f;
+    private double power = 0.35f;
 
     @Override
     public void runOpMode() {
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(power);
+        hook = hardwareMap.get(DcMotor.class, "HookMotor");
+
+        hook.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hook.setPower(power);
 
         waitForStart();
 
-
+        if(opModeIsActive()){
+            hook.setTargetPosition(630);
+        }
     }
 }
