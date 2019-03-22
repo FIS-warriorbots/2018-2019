@@ -30,9 +30,11 @@ public class autonomous extends LinearOpMode {
 
 
 
-    boolean delStat = false;
+    boolean delStat = true;
 
     private double samplePower = 0.4f;
+
+    private double afterSamplePower = 1;
 
     private boolean Sampled = false;
 
@@ -70,6 +72,10 @@ public class autonomous extends LinearOpMode {
         //set motorPower values
         LinearSlide.setPower(LinearSlidePower);
 
+        initVuforia();
+
+        initTensorFlow();
+
         waitForStart();
 
         if(opModeIsActive()) {
@@ -84,10 +90,6 @@ public class autonomous extends LinearOpMode {
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-
-        initVuforia();
-
-        initTensorFlow();
 
         tensorFlow.activate();
 
@@ -134,8 +136,8 @@ public class autonomous extends LinearOpMode {
                 leftMotor.setTargetPosition(-1000);
                 rightMotor.setTargetPosition(1000);
 
-                leftMotor.setPower(-samplePower);
-                rightMotor.setPower(samplePower);
+                leftMotor.setPower(-afterSamplePower);
+                rightMotor.setPower(afterSamplePower);
 
                 Sampled = true;
             }
@@ -177,10 +179,6 @@ public class autonomous extends LinearOpMode {
         LinearSlide.setPower(-LinearSlidePower);
         //move Linear slide back down
         LinearSlide.setTargetPosition(-400); //may change
-
-        //wait for 2 seconds
-        time.reset();
-        while(time.milliseconds() <= 2000){}
 
         //reset wheel motor positions
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

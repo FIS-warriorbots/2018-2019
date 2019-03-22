@@ -44,11 +44,11 @@ public class RemoteControl extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            LeftPower = this.gamepad1.left_stick_y * multiplier;
-            RightPower = -this.gamepad1.right_stick_y * multiplier;
+            LeftPower = -this.gamepad1.right_stick_y * multiplier;
+            RightPower = this.gamepad1.left_stick_y * multiplier;
             LinearSlidePower = this.gamepad1.right_trigger - this.gamepad1.left_trigger;
             PickupJointPower = this.gamepad2.right_stick_y * 0.5;
-            PickupPower = this.gamepad2.left_stick_y * 0.7;
+            PickupPower = this.gamepad2.left_stick_y * 0.625;
 
             if(this.gamepad1.a){
                 Lock.setPosition(1);
