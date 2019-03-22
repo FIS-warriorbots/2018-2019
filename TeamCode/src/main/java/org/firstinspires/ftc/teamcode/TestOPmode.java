@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class TestOPmode extends LinearOpMode {
@@ -16,6 +17,9 @@ public class TestOPmode extends LinearOpMode {
     private DcMotor leftMotor;
     private DcMotor rightMotor;
     private DcMotor hook;
+
+    private Servo LockMotor;
+
     private double expectedLeft = 0f;
     private double expectedRight = 0f;
     private double expectedHook = 0f;
@@ -27,6 +31,8 @@ public class TestOPmode extends LinearOpMode {
         rightMotor = hardwareMap.get(DcMotor.class, "RightMotor");
         hook = hardwareMap.get(DcMotor.class, "HookMotor");
 
+        LockMotor = hardwareMap.get(Servo.class, "LinearSlideLockServo");
+
         waitForStart();
 
         /*
@@ -36,6 +42,8 @@ public class TestOPmode extends LinearOpMode {
         */
 
         hook.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -53,7 +61,14 @@ public class TestOPmode extends LinearOpMode {
             rightMotor.setPower(expectedRight);
             hook.setPower(expectedHook);
 
+            if(this.gamepad1.a){
+                LockMotor.setPosition(1);
+            }
 
+            if(this.gamepad1.b){
+                LockMotor.setPosition(0);
+
+            }
             if(!this.gamepad1.dpad_up && !this.gamepad1.dpad_down){
                 dpadDown = false;
             }

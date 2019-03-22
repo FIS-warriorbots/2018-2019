@@ -6,9 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous
 public class unhook extends LinearOpMode {
+
+    ElapsedTime time = new ElapsedTime();
 
     private DcMotor slide;
     private DcMotor leftMotor;
@@ -26,7 +29,7 @@ public class unhook extends LinearOpMode {
         leftMotor = hardwareMap.get(DcMotor.class, "LeftMotor");
         rightMotor = hardwareMap.get(DcMotor.class, "RightMotor");
 
-        lock = hardwareMap.get(Servo.class, "HookLockServo");
+        lock = hardwareMap.get(Servo.class, "LinearSlideLockServo");
 
         //reset motor positions to zero
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -39,16 +42,62 @@ public class unhook extends LinearOpMode {
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //set motorPower values
-        leftMotor.setPower(drivePower);
-        rightMotor.setPower(drivePower);
         slide.setPower(power);
 
         waitForStart();
 
         if(opModeIsActive()){
-            lock.setPosition(0.5); //move linearSlide lock 90°
-            sleep(2000);
-            slide.setTargetPosition(630); //move linear slide up (robot down)
+            lock.setPosition(0);
+            time.reset();
+            while(time.milliseconds() <= 2000){}
+            slide.setTargetPosition(607); //move linear slide up (robot down)
+
+            while(slide.isBusy()){} //wait for slide to move all the way up
+
+
+            leftMotor.setPower(-drivePower);
+            rightMotor.setPower(-drivePower);
+            rightMotor.setTargetPosition(-60);
+            leftMotor.setTargetPosition(-125);
+
+            while(leftMotor.isBusy()){}
+
+            slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            slide.setPower(-power);
+            slide.setTargetPosition(-400);
+
+            time.reset();
+            while(time.milliseconds() <= 2000){}
+
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            leftMotor.setPower(-drivePower);
+            rightMotor.setPower(drivePower);
+
+            leftMotor.setTargetPosition(-120);
+            rightMotor.setTargetPosition(120);
+
+            while(leftMotor.isBusy()){}
+
+            leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            leftMotor.setPower(-drivePower);
+            rightMotor.setPower(-drivePower);
+
+            leftMotor.setTargetPosition(-30);
+            rightMotor.setTargetPosition(-30);
+
+            while(leftMotor.isBusy()){}
         }
     }
 }

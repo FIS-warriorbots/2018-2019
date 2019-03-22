@@ -44,7 +44,6 @@ public class Sampling extends LinearOpMode {
     private int SilverMineral2X = -1;
 
 
-
     @Override
     public void runOpMode() {
 
@@ -129,22 +128,6 @@ public class Sampling extends LinearOpMode {
                         leftMotor.setPower(0);
                     }
                 }
-
-                /*
-                else {
-                    if(GoldMineralX != -1){
-                        if(GoldMineralX > 750){
-                            rightMotor.setPower(motorpower);
-                            leftMotor.setPower(motorpower);
-                        }
-                        else{
-                            rightMotor.setPower(-motorpower);
-                            leftMotor.setPower(-motorpower);
-                        }
-                    }
-                }
-
-               */
             }
 
             telemetry.addData("Xpos", GoldMineralX);
