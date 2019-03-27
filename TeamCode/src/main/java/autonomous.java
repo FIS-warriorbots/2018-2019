@@ -26,13 +26,13 @@ public class autonomous extends LinearOpMode {
 
     //global power constants
     private final double LinearSlidePower = 0.35f;
-    private final double drivePower = 0.6f;
+    private final double drivePower = 0.8f;
 
 
 
     boolean delStat = true;
 
-    private double samplePower = 0.4f;
+    private double samplePower = 1f;
 
     private double afterSamplePower = 1;
 
@@ -106,7 +106,7 @@ public class autonomous extends LinearOpMode {
 
     void Sample(){
 
-        if(time.milliseconds() >= 500){
+        if(time.milliseconds() >= 400){
             delStat = !delStat;
             time.reset();
         }
@@ -207,8 +207,8 @@ public class autonomous extends LinearOpMode {
         rightMotor.setPower(drivePower);
 
         //move robot forward
-        leftMotor.setTargetPosition(-50); //may change
-        rightMotor.setTargetPosition(50); //may change
+        leftMotor.setTargetPosition(-85); //may change
+        rightMotor.setTargetPosition(-85); //may change
 
         while(leftMotor.isBusy()){} //wait for left motor to be done moving
 

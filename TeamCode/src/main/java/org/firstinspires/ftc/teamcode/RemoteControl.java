@@ -48,7 +48,7 @@ public class RemoteControl extends LinearOpMode {
             RightPower = this.gamepad1.left_stick_y * multiplier;
             LinearSlidePower = this.gamepad1.right_trigger - this.gamepad1.left_trigger;
             PickupJointPower = this.gamepad2.right_stick_y * 0.5;
-            PickupPower = this.gamepad2.left_stick_y * 0.625;
+            PickupPower = -this.gamepad2.left_stick_y;
 
             if(this.gamepad1.a){
                 Lock.setPosition(1);
@@ -66,11 +66,17 @@ public class RemoteControl extends LinearOpMode {
                 PickupGrabber.setPower(0);
             }
 
+            if(this.gamepad2.x){
+                PickupGrabber.setPower(-1);
+            }
+
             leftMotor.setPower(LeftPower);
             rightMotor.setPower(RightPower);
             LinearSlide.setPower(LinearSlidePower);
             PickupJoint.setPower(PickupJointPower);
             PickupMotor.setPower(PickupPower);
+            telemetry.addData("PickupMotor", PickupMotor.getPower());
+            telemetry.update();
         }
     }
 }
